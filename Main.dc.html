@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Portfolio</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&amp;display=swap">
+<style>
+body{margin:0}
+.th-light{--bg:#FFFFFF;--fg:#0B0B0C;--mute:#6B6B72;--line:#E4E4E7;--chip:#F2F2F3}
+.th-dark{--bg:#0B0B0C;--fg:#F4F4F2;--mute:#9A9AA0;--line:#2A2A2D;--chip:#18181A}
+.gut{padding-left:clamp(16px,4vw,56px);padding-right:clamp(16px,4vw,56px)}
+.wrap{max-width:1440px;margin:0 auto;box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+a:hover{opacity:0.6}
+.card:hover{opacity:1}
+.card .cv{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.card:hover .cv{transform:scale(1.04)}
+.lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:4px}
+button{font-family:inherit}
+.thumb{width:140px;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.irow:hover .thumb{width:280px}
+.ilist:hover .irow{opacity:.3}
+.ilist .irow:hover{opacity:1}
+.irow{transition:opacity .3s}
+
+@keyframes loadup{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:.1;transform:translateY(64px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:.1;transform:scale(.84)}to{opacity:1;transform:none}}
+@keyframes drift{from{transform:translateY(-7%)}to{transform:translateY(7%)}}
+@keyframes prog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+.in{animation:loadup .9s cubic-bezier(.2,.7,.2,1) both}
+.in2{animation:loadup .9s .12s cubic-bezier(.2,.7,.2,1) both}
+.in3{animation:loadup .9s .24s cubic-bezier(.2,.7,.2,1) both}
+.px{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;image-rendering:pixelated;image-rendering:crisp-edges;image-rendering:pixelated;filter:brightness(0.86) contrast(1.08) saturate(1.05);opacity:0;transition:opacity .25s;pointer-events:none}
+.reveal:hover .px{opacity:1}
+.reveal:hover .px2{transition-delay:.16s}
+.reveal:hover .px3{transition-delay:.34s}
+@media (hover:none){.px{opacity:1}}
+@property --x0{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y0{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --x1{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y1{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --x2{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y2{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --x3{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y3{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --x4{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y4{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --x5{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y5{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --x6{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y6{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --x7{syntax:'<percentage>';inherits:false;initial-value:50%}
+@property --y7{syntax:'<percentage>';inherits:false;initial-value:50%}
+@keyframes fx0{0%{--x0:57%;--y0:71%}25%{--x0:99%;--y0:59%}50%{--x0:57%;--y0:65%}75%{--x0:75%;--y0:24%}100%{--x0:57%;--y0:71%}}
+@keyframes fx1{0%{--x1:23%;--y1:65%}25%{--x1:60%;--y1:80%}50%{--x1:78%;--y1:23%}75%{--x1:12%;--y1:57%}100%{--x1:23%;--y1:65%}}
+@keyframes fx2{0%{--x2:38%;--y2:18%}25%{--x2:11%;--y2:68%}50%{--x2:88%;--y2:81%}75%{--x2:5%;--y2:76%}100%{--x2:38%;--y2:18%}}
+@keyframes fx3{0%{--x3:50%;--y3:57%}25%{--x3:83%;--y3:94%}50%{--x3:78%;--y3:83%}75%{--x3:20%;--y3:79%}100%{--x3:50%;--y3:57%}}
+@keyframes fx4{0%{--x4:1%;--y4:67%}25%{--x4:8%;--y4:7%}50%{--x4:4%;--y4:24%}75%{--x4:30%;--y4:76%}100%{--x4:1%;--y4:67%}}
+@keyframes fx5{0%{--x5:3%;--y5:99%}25%{--x5:59%;--y5:41%}50%{--x5:56%;--y5:75%}75%{--x5:25%;--y5:66%}100%{--x5:3%;--y5:99%}}
+@keyframes fx6{0%{--x6:29%;--y6:81%}25%{--x6:37%;--y6:63%}50%{--x6:0%;--y6:84%}75%{--x6:10%;--y6:58%}100%{--x6:29%;--y6:81%}}
+@keyframes fx7{0%{--x7:83%;--y7:35%}25%{--x7:52%;--y7:70%}50%{--x7:10%;--y7:90%}75%{--x7:32%;--y7:40%}100%{--x7:83%;--y7:35%}}
+.flow{animation:fx0 19s ease-in-out infinite,fx1 23s ease-in-out infinite,fx2 27s ease-in-out infinite,fx3 31s ease-in-out infinite,fx4 35s ease-in-out infinite,fx5 22s ease-in-out infinite,fx6 29s ease-in-out infinite,fx7 38s ease-in-out infinite}
+.grain{position:absolute;inset:-20%;mix-blend-mode:overlay;pointer-events:none;animation:grain .9s steps(1) infinite}
+.prog{position:fixed;top:0;left:0;right:0;height:2px;background:var(--fg);transform-origin:0 50%;z-index:50;pointer-events:none}
+@supports (animation-timeline: view()){
+.rv{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+.pp{animation:pop linear both;animation-timeline:view();animation-range:entry 0% entry 75%}
+.par{animation:drift linear both;animation-timeline:view()}
+.prog{animation:prog linear both;animation-timeline:scroll(root)}
+}
+@media (max-width:720px){.vlabel{display:none}.thumb,.idate{display:none}}
+@media (prefers-reduced-motion:reduce){.in,.in2,.in3,.flow,.grain,.rv,.pp,.par,.prog{animation:none!important}.card .cv,.thumb{transition:none}}
+</style>
+</helmet>
+
+<div id="top" class="{{themeClass}}" style="background:var(--bg); color:var(--fg); font-family:'Geist','Helvetica Neue',Arial,sans-serif; font-size:15px; line-height:1.5; min-height:100%; overflow-x:clip">
+<div class="prog" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header class="gut wrap" style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:14px; padding-bottom:14px">
+<div style="display:flex; align-items:center; min-height:44px">
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<a href="#top" style="font-size:12px; font-weight:500; letter-spacing:.06em; text-transform:uppercase">Mitul Mungase</a>
+</sc-if>
+<sc-if value="{{isDetail}}" hint-placeholder-val="{{ false }}">
+<a href="#top" onClick="{{goHome}}" style="display:inline-flex; align-items:center; gap:10px; min-height:44px; font-size:11px; letter-spacing:.06em; text-transform:uppercase"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>Home</a>
+</sc-if>
+</div>
+<nav aria-label="Primary" style="display:flex; align-items:center; gap:4px 6px; font-size:11px; letter-spacing:.06em; text-transform:uppercase">
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<a href="#work" style="display:inline-flex; align-items:center; min-height:44px; padding:0 10px">Work</a>
+<a href="#about" style="display:inline-flex; align-items:center; min-height:44px; padding:0 10px">About</a>
+<a href="#contact" style="display:inline-flex; align-items:center; min-height:44px; padding:0 10px">Contact</a>
+</sc-if>
+<button type="button" onClick="{{toggleTheme}}" aria-label="Switch between light and dark" style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; padding:0; border:0; background:transparent; color:var(--fg); cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"></path></svg></button>
+</nav>
+</header>
+
+<!-- ============ HOME ============ -->
+<sc-if value="{{isHome}}" hint-placeholder-val="{{ true }}">
+<main>
+
+<section class="gut wrap" style="padding-top:clamp(40px,6vw,88px); padding-bottom:clamp(72px,9vw,130px)">
+<h1 class="in" style="margin:0; max-width:15em; font-weight:400; font-size:clamp(34px,5.4vw,78px); line-height:1.03; letter-spacing:-0.015em; text-transform:uppercase; text-wrap:balance">Mitul Mungase. AI/ML engineer building agents and full-stack products</h1>
+<p class="lbl in2" style="margin:28px 0 0 0">MSc Data Science, NMIMS Mumbai · Open to AI/ML roles</p>
+</section>
+
+<!-- WORK -->
+<section id="work" class="gut wrap">
+<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px 24px; padding-bottom:clamp(32px,4vw,56px)">
+<p class="lbl" style="margin:0">Selected work, 2026 · View as</p>
+<div role="group" aria-label="Choose project layout" style="display:inline-flex; flex-wrap:wrap; gap:4px; padding:4px; background:var(--chip); border:1px solid var(--line); border-radius:999px">
+<sc-for list="{{wsChips}}" as="c" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}" style="min-height:40px; padding:0 18px; border:0; border-radius:999px; font-size:12px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; {{c.css}}">{{c.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<!-- Style 1: staggered -->
+<sc-if value="{{isStagger}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; row-gap:72px">
+<sc-for list="{{projects}}" as="p" hint-placeholder-count="4">
+<a href="#work" class="card rv" onClick="{{p.open}}" aria-label="{{p.title}}" style="display:block; {{p.itemStyle}}">
+<div style="{{p.cv.frame}}" onMouseMove="{{p.cv.move}}" onMouseLeave="{{p.cv.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{p.cv.mv}}"><div class="flow" style="{{p.cv.bg}}"></div></div></div><div class="grain" style="{{p.cv.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+<div style="display:flex; align-items:baseline; gap:14px; padding-top:14px; font-size:11px; letter-spacing:.05em; text-transform:uppercase">
+<span style="flex:0 0 14px; color:var(--mute)">{{p.n}}</span>
+<span style="min-width:0">{{p.title}}</span>
+<span aria-hidden="true">→</span>
+</div>
+</a>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Style 2: index list -->
+<sc-if value="{{isIndex}}" hint-placeholder-val="{{ false }}">
+<div class="ilist" style="border-bottom:1px solid var(--line)">
+<sc-for list="{{projects}}" as="p" hint-placeholder-count="4">
+<a href="#work" class="card irow rv" onClick="{{p.open}}" aria-label="{{p.title}}" style="display:flex; align-items:center; gap:clamp(12px,3vw,40px); padding:clamp(18px,2.4vw,30px) 0; border-top:1px solid var(--line)">
+<span class="lbl" style="flex:0 0 24px">{{p.n}}</span>
+<span style="flex:1 1 auto; min-width:0; font-size:clamp(24px,4.4vw,64px); line-height:1.02; letter-spacing:-0.02em; text-transform:uppercase; text-wrap:balance">{{p.title}}</span>
+<span class="lbl idate" style="flex:0 0 auto; text-align:right">{{p.field}}<br>{{p.date}}</span>
+<div class="thumb" style="flex:0 0 auto">
+<div style="{{p.th.frame}}" onMouseMove="{{p.th.move}}" onMouseLeave="{{p.th.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{p.th.mv}}"><div class="flow" style="{{p.th.bg}}"></div></div></div><div class="grain" style="{{p.th.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+</div>
+<span aria-hidden="true" style="flex:0 0 auto; font-size:20px">→</span>
+</a>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Style 3: stacked cards -->
+<sc-if value="{{isStack}}" hint-placeholder-val="{{ false }}">
+<div style="max-width:1100px; margin:0 auto">
+<sc-for list="{{projects}}" as="p" hint-placeholder-count="4">
+<a href="#work" class="card" onClick="{{p.open}}" aria-label="{{p.title}}" style="display:block; position:sticky; top:{{p.sticky}}; margin-bottom:clamp(40px,10vh,120px)">
+<div style="{{p.wide.frame}}" onMouseMove="{{p.wide.move}}" onMouseLeave="{{p.wide.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{p.wide.mv}}"><div class="flow" style="{{p.wide.bg}}"></div></div></div><div class="grain" style="{{p.wide.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div>
+<div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(14,0,12,0.75), rgba(14,0,12,0) 58%)"></div>
+<div style="position:absolute; left:clamp(18px,3vw,40px); right:clamp(18px,3vw,40px); top:clamp(16px,2.4vw,30px); display:flex; justify-content:space-between; color:#FFFFFF; font-size:11px; letter-spacing:.06em; text-transform:uppercase"><span>{{p.n}} / 4</span><span>{{p.field}} · {{p.date}}</span></div>
+<div style="position:absolute; left:clamp(18px,3vw,40px); right:clamp(18px,3vw,40px); bottom:clamp(18px,3vw,40px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:12px 24px; color:#FFFFFF">
+<span style="font-size:clamp(24px,3.8vw,52px); line-height:1.04; letter-spacing:-0.02em; text-transform:uppercase; max-width:14em">{{p.title}}</span>
+<span style="font-size:11px; letter-spacing:.06em; text-transform:uppercase; border:1px solid rgba(255,255,255,0.6); border-radius:999px; padding:8px 16px">View project →</span>
+</div>
+</div>
+</a>
+</sc-for>
+</div>
+</sc-if>
+</section>
+
+<section id="about" class="gut wrap" style="padding-top:clamp(96px,12vw,180px)">
+<h2 class="rv" style="margin:0; max-width:14em; font-weight:400; font-size:clamp(30px,4.4vw,62px); line-height:1.06; letter-spacing:-0.01em; text-transform:uppercase; text-wrap:balance">I build intelligent systems from the model to the deployed app.</h2>
+<p class="rv" style="margin:clamp(28px,3vw,44px) 0 0 0; max-width:34em; font-size:clamp(16px,1.5vw,21px); line-height:1.4; text-transform:uppercase">I learn by building. Deep learning models, LLM agents and the full-stack apps around them, with evaluation, human review and tracing built in. I also analyse data for business problems and propose solutions.</p>
+</section>
+
+<section class="gut wrap" style="padding-top:clamp(80px,10vw,160px); display:flex; flex-wrap:wrap; align-items:center; gap:56px 8%">
+<div class="pp" style="flex:0 1 32%; min-width:240px">
+<div style="{{edu.cv.frame}}" onMouseMove="{{edu.cv.move}}" onMouseLeave="{{edu.cv.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{edu.cv.mv}}"><div class="flow" style="{{edu.cv.bg}}"></div></div></div><div class="grain" style="{{edu.cv.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+</div>
+<div style="flex:1 1 360px; max-width:560px; margin-left:auto; min-width:0; display:flex; flex-direction:column; gap:26px">
+<p class="lbl" style="margin:0">Education and certifications</p>
+<sc-for list="{{eduList}}" as="e" hint-placeholder-count="4">
+<div class="rv" style="display:flex; justify-content:space-between; align-items:flex-start; gap:24px">
+<div style="min-width:0">
+<div style="font-size:17px; line-height:1.25; text-transform:uppercase">{{e.t}}</div>
+<div class="lbl" style="margin-top:4px">{{e.sub}}</div>
+</div>
+<div style="flex:0 0 auto; font-size:17px; line-height:1.25; color:var(--mute); font-variant-numeric:tabular-nums">{{e.yr}}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section class="gut wrap" style="padding-top:clamp(64px,8vw,120px)">
+<div style="max-width:560px; margin-left:auto; display:flex; flex-direction:column; gap:26px">
+<p class="lbl" style="margin:0">A few other things</p>
+<sc-for list="{{personalList}}" as="e" hint-placeholder-count="8">
+<div class="rv" style="display:flex; justify-content:space-between; align-items:flex-start; gap:24px">
+<div style="min-width:0; font-size:17px; line-height:1.25; text-transform:uppercase">{{e.t}}</div>
+<div style="flex:0 1 58%; font-size:15px; line-height:1.35; color:var(--mute); text-align:right; text-transform:uppercase">{{e.sub}}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section class="gut wrap" style="padding-top:clamp(80px,10vw,160px)">
+<p class="lbl" style="margin:0 0 20px 0">Stack</p>
+<div style="border-top:1px solid var(--line)">
+<sc-for list="{{stack}}" as="s" hint-placeholder-count="6">
+<div class="rv" style="display:flex; flex-wrap:wrap; gap:8px 32px; padding:20px 0; border-bottom:1px solid var(--line)">
+<div class="lbl" style="flex:0 0 200px; padding-top:3px">{{s.k}}</div>
+<div style="flex:1 1 320px; min-width:0; font-size:15px; line-height:1.55; text-transform:uppercase">{{s.v}}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section id="contact" class="gut wrap" style="padding-top:clamp(96px,12vw,180px); padding-bottom:clamp(80px,10vw,150px)">
+<p class="lbl" style="margin:0 0 18px 0">Hiring for AI/ML or agentic systems? Get in touch</p>
+<a class="rv" href="mailto:mitul30m@icloud.com" style="display:inline-block; max-width:100%; font-size:clamp(24px,6.2vw,92px); line-height:1.05; letter-spacing:-0.02em; text-transform:uppercase; overflow-wrap:anywhere; border-bottom:2px solid var(--fg)">mitul30m@icloud.com</a>
+</section>
+
+<section class="gut wrap" style="padding-top:clamp(32px,5vw,72px); display:flex; justify-content:flex-end">
+<div class="pp reveal" style="width:min(100%,320px)">
+<div style="{{edu.cv.frame}}" onMouseMove="{{edu.cv.move}}" onMouseLeave="{{edu.cv.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{edu.cv.mv}}"><div class="flow" style="{{edu.cv.bg}}"></div></div></div><img class="px px1" src="./assets/42c4933027e7962d60bd72e50335093f.png" alt="" aria-hidden="true"><img class="px px2" src="./assets/50684fc377732d243c7a65d7741be71b.png" alt="" aria-hidden="true"><img class="px px3" src="./assets/affea4f9f4971fe08307200b2a8b2087.png" alt="Pixelated portrait of Mitul Mungase"><div class="grain" style="{{edu.cv.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+</div>
+</section>
+
+<!-- COLLAPSE (last section) -->
+<section class="gut wrap" style="padding-top:clamp(24px,4vw,64px); padding-bottom:0">
+<h2 id="clp" aria-label="Currently somewhere between “I know this” and “let me experiment with it.”" onMouseMove="{{clp.wind}}" style="{{clp.box}}">
+<sc-for list="{{clp.words}}" as="w" hint-placeholder-count="12">
+<span id="{{w.id}}" aria-hidden="true" style="{{w.style}}">{{w.t}}</span>
+</sc-for>
+</h2>
+<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px 24px; padding-top:28px; padding-bottom:28px">
+<p class="lbl" style="margin:0; min-width:0">{{clp.hint}}</p>
+<button type="button" onClick="{{clp.toggle}}" style="min-height:44px; padding:0 22px; border:1px solid var(--fg); border-radius:999px; background:transparent; color:var(--fg); font-size:12px; letter-spacing:.05em; text-transform:uppercase; cursor:pointer">{{clp.label}}</button>
+</div>
+</section>
+
+</main>
+</sc-if>
+
+<!-- ============ PROJECT PAGE ============ -->
+<sc-if value="{{isDetail}}" hint-placeholder-val="{{ false }}">
+<main>
+
+<section style="position:relative; display:flex; flex-wrap:wrap; align-items:stretch">
+<div class="gut" style="flex:1 1 380px; min-width:0; box-sizing:border-box; display:flex; align-items:center; padding-top:56px; padding-bottom:56px">
+<h1 class="in" style="margin:0; max-width:12em; font-weight:400; font-size:clamp(28px,4vw,58px); line-height:1.1; letter-spacing:-0.01em; text-transform:uppercase; text-wrap:balance">{{cur.tagline}}</h1>
+</div>
+<div onMouseMove="{{cur.hero.move}}" onMouseLeave="{{cur.hero.leave}}" style="flex:1 1 380px; min-width:0; position:relative; min-height:clamp(340px,48vw,720px); overflow:hidden">
+<div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.hero.mv}}"><div class="flow" style="{{cur.hero.bg}}"></div></div></div><div class="grain" style="{{cur.hero.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div>
+</div>
+<div class="lbl vlabel" style="position:absolute; left:max(4px, calc(clamp(16px,4vw,56px) - 22px)); top:clamp(60px,9vw,140px); writing-mode:vertical-rl; transform:rotate(180deg)">{{cur.n}}. {{cur.title}}</div>
+</section>
+
+<section class="gut wrap" style="padding-top:clamp(48px,6vw,88px); padding-bottom:clamp(72px,9vw,140px); display:flex; flex-wrap:wrap; gap:36px 7%">
+<dl class="rv" style="flex:0 1 380px; min-width:260px; margin:0; display:flex; flex-direction:column; gap:10px">
+<sc-for list="{{cur.meta}}" as="m" hint-placeholder-count="4">
+<div style="display:flex; gap:20px; font-size:12px; line-height:1.45">
+<dt class="lbl" style="flex:0 0 88px; margin:0; padding-top:1px">{{m.k}}</dt>
+<dd style="margin:0; min-width:0; text-transform:uppercase">{{m.v}}</dd>
+</div>
+</sc-for>
+</dl>
+<div style="flex:1 1 340px; max-width:520px; min-width:0">
+<p class="rv" style="margin:0; font-size:13px; line-height:1.6">{{cur.intro}}</p>
+<a class="rv" href="{{cur.repo}}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:8px; margin-top:18px; padding-bottom:5px; border-bottom:1px solid var(--fg); font-size:11px; letter-spacing:.06em; text-transform:uppercase">Find project on GitHub ↗</a>
+</div>
+</section>
+
+<section class="gut wrap">
+<div style="width:min(100%,860px); margin:0 auto; display:flex; flex-direction:column; gap:clamp(56px,8vw,120px)">
+
+<div class="pp" style="{{cur.g1.frame}}" onMouseMove="{{cur.g1.move}}" onMouseLeave="{{cur.g1.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g1.mv}}"><div class="flow" style="{{cur.g1.bg}}"></div></div></div><div class="grain" style="{{cur.g1.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:48px 6%">
+<div style="flex:0 1 38%; min-width:220px; display:flex; flex-direction:column; gap:clamp(36px,5vw,64px)">
+<div class="pp" style="{{cur.g2.frame}}" onMouseMove="{{cur.g2.move}}" onMouseLeave="{{cur.g2.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g2.mv}}"><div class="flow" style="{{cur.g2.bg}}"></div></div></div><div class="grain" style="{{cur.g2.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+<div class="rv">
+<p class="lbl" style="margin:0 0 12px 0">Approach</p>
+<p style="margin:0; font-size:15px; line-height:1.5; text-transform:uppercase">{{cur.approach}}</p>
+</div>
+</div>
+<div style="flex:0 1 46%; min-width:240px; padding-top:clamp(0px,5vw,72px)">
+<div class="pp" style="{{cur.g3.frame}}" onMouseMove="{{cur.g3.move}}" onMouseLeave="{{cur.g3.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g3.mv}}"><div class="flow" style="{{cur.g3.bg}}"></div></div></div><div class="grain" style="{{cur.g3.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+</div>
+</div>
+
+<div class="pp" style="{{cur.g4.frame}}" onMouseMove="{{cur.g4.move}}" onMouseLeave="{{cur.g4.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g4.mv}}"><div class="flow" style="{{cur.g4.bg}}"></div></div></div><div class="grain" style="{{cur.g4.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+
+<div class="rv" style="max-width:460px; margin-left:auto">
+<p class="lbl" style="margin:0 0 12px 0">Outcome</p>
+<p style="margin:0; font-size:15px; line-height:1.5; text-transform:uppercase">{{cur.result}}</p>
+</div>
+
+<div>
+<p class="lbl" style="margin:0 0 16px 0">Key figures</p>
+<div style="border-top:1px solid var(--line)">
+<sc-for list="{{cur.metrics}}" as="x" hint-placeholder-count="4">
+<div class="rv" style="display:flex; justify-content:space-between; align-items:baseline; gap:24px; padding:18px 0; border-bottom:1px solid var(--line)">
+<div style="min-width:0; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:var(--mute)">{{x.k}}</div>
+<div style="flex:0 0 auto; font-size:clamp(20px,2.4vw,32px); line-height:1.1; letter-spacing:-0.01em; text-transform:uppercase; font-variant-numeric:tabular-nums; text-align:right">{{x.v}}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div class="pp" style="{{cur.g5.frame}}" onMouseMove="{{cur.g5.move}}" onMouseLeave="{{cur.g5.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g5.mv}}"><div class="flow" style="{{cur.g5.bg}}"></div></div></div><div class="grain" style="{{cur.g5.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
+
+</div>
+</section>
+
+<section class="gut wrap" style="padding-top:clamp(80px,10vw,160px); padding-bottom:clamp(64px,8vw,120px); display:flex; flex-wrap:wrap; justify-content:center; gap:32px clamp(48px,10vw,160px)">
+<a href="#top" class="pp" onClick="{{cur.goPrev}}" aria-label="Previous project" style="width:190px; height:190px; box-sizing:border-box; padding:22px; border-radius:50%; background:var(--fg); color:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+<span style="font-size:11px; letter-spacing:.05em; line-height:1.3; text-transform:uppercase">{{cur.prevTitle}}</span>
+</a>
+<a href="#top" class="pp" onClick="{{cur.goNext}}" aria-label="Next project" style="width:190px; height:190px; box-sizing:border-box; padding:22px; border-radius:50%; background:var(--fg); color:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+<span style="font-size:11px; letter-spacing:.05em; line-height:1.3; text-transform:uppercase">{{cur.nextTitle}}</span>
+</a>
+</section>
+
+</main>
+</sc-if>
+
+<!-- FOOTER -->
+<footer class="gut wrap" style="padding-top:20px; padding-bottom:32px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px 24px; font-size:11px; letter-spacing:.05em; text-transform:uppercase">
+<span style="display:inline-flex; align-items:center; gap:8px"><span aria-hidden="true" style="width:7px; height:7px; border-radius:50%; background:var(--fg)"></span>mitul30m@icloud.com</span>
+<div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px 0">
+<a href="https://www.linkedin.com/in/mitul-mungase-5010b8248/" style="display:inline-flex; align-items:center; min-height:44px; padding:0 16px">LinkedIn ↗</a>
+<a href="https://github.com/Mitul30M" style="display:inline-flex; align-items:center; min-height:44px; padding:0 16px; border-left:1px solid var(--line)">GitHub ↗</a>
+<a href="#top" aria-label="Back to top" style="display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; margin-left:16px; border:1px solid var(--fg); border-radius:50%"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></a>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":5200}}'>
+class Component extends DCLogic {
+renderVals() {
+const st = this.state || {};
+const view = st.view || 'home';
+const dark = !!st.dark;
+const ws = st.ws || 'stagger';
+
+const hex = (h) => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+const rgba = (h, a) => { const c = hex(h); return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; };
+const rng = (seed) => { let s = seed * 7919 + 12345; return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; }; };
+
+const mesh = (pal, seed) => {
+  const rnd = rng(seed);
+  const layers = [];
+  for (let i = 0; i < 8; i++) {
+    const c = pal.c[Math.floor(rnd() * pal.c.length)];
+    const x = Math.round(rnd() * 100);
+    const y = Math.round(rnd() * 100);
+    const rx = Math.round(30 + rnd() * 50);
+    const ry = Math.round(22 + rnd() * 45);
+    layers.push('radial-gradient(ellipse ' + rx + '% ' + ry + '% at var(--x' + i + ', ' + x + '%) var(--y' + i + ', ' + y + '%), ' + rgba(c, 0.95) + ' 0%, ' + rgba(c, 0.55) + ' 45%, ' + rgba(c, 0) + ' 100%)');
+  }
+  return layers.join(', ') + ', ' + pal.base;
+};
+
+// Soft gradient cover. The mesh drifts on its own, the grain jitters, and the colours lean toward the cursor.
+const phase = (seed) => { const r = rng(seed + 99); const d = []; for (let i = 0; i < 8; i++) d.push('-' + (r() * 40).toFixed(1) + 's'); return d.join(','); };
+const hv = st.hv;
+const cover = (pal, seed, frame, key) => {
+  const on = !!(hv && hv.k === key);
+  const x = on ? hv.x : 50;
+  const y = on ? hv.y : 50;
+  const dx = ((x - 50) / 50 * 5).toFixed(2);
+  const dy = ((y - 50) / 50 * 5).toFixed(2);
+  return {
+    frame: frame,
+    bg: 'position:absolute; inset:0; background:' + mesh(pal, seed) + '; animation-delay:' + phase(seed) + ';',
+    mv: 'position:absolute; inset:-6%; transform:translate(' + dx + '%,' + dy + '%); transition:transform .7s cubic-bezier(.2,.7,.2,1);',
+    grainBox: on ? (key === 'edu' ? 'opacity:0.4; filter:contrast(1.4); animation-duration:.3s; transition:opacity .25s;' : 'opacity:1; filter:contrast(2.6) brightness(1.1); animation-duration:.3s; transition:opacity .25s;') : 'opacity:0.4; transition:opacity .25s;',
+    move: (e) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      const mx = Math.max(0, Math.min(100, Math.round((e.clientX - r.left) / r.width * 100)));
+      const my = Math.max(0, Math.min(100, Math.round((e.clientY - r.top) / r.height * 100)));
+      this.setState({ hv: { k: key, x: mx, y: my } });
+    },
+    leave: () => this.setState({ hv: null })
+  };
+};
+const frameCss = (ar) => 'position:relative; overflow:hidden; isolation:isolate; border-radius:18px; width:100%; aspect-ratio:' + ar + ';';
+
+const go = (id) => (e) => {
+  if (e && e.preventDefault) e.preventDefault();
+  this.setState({ view: id });
+  try { window.scrollTo(0, 0); } catch (err) {}
+};
+
+const PAL = [
+  { base: '#FF5A4F', c: ['#9B4DE0', '#C04FD4', '#FF8A5C', '#FF4D4D', '#8E3FD6'] },
+  { base: '#C9F26B', c: ['#4FD486', '#E9FF9E', '#2FBF71', '#F6FFD1', '#8FE06A'] },
+  { base: '#FF9CCB', c: ['#E8409A', '#FFD9B8', '#FF6FB0', '#FFF1DC', '#C04FD4'] },
+  { base: '#F25A2A', c: ['#FFC83D', '#FF8A3D', '#B8321F', '#FFE9A8', '#FF4D4D'] }
+];
+
+const DATA = [
+  {
+    id: 'hmda', short: 'Mortgage Predictor', title: 'Home Mortgage Approval Predictor', repo: 'https://github.com/search?q=user%3AMitul30M+Mortgage&type=repositories',
+    tagline: 'The operating threshold is a fairness decision as much as a precision one.',
+    intro: 'An XGBoost model tuned with Optuna on 12.2M records from the 2024 US HMDA loan-level dataset, with SHAP explanations, Platt calibration and a fairness audit across race, ethnicity and sex.',
+    approach: 'An XGBoost classifier tuned with Optuna, calibrated and explained with SHAP. The audit then compares error rates across race, ethnicity and sex at the chosen operating threshold.',
+    result: 'The 0.858 business threshold halved the race error-rate gap, from 0.0125 to 0.0064, but widened the ethnicity and sex gaps.',
+    meta: [['Date', 'Aug 2026'], ['Field', 'Machine learning'], ['Data', '2024 US HMDA, 12.2M records'], ['Stack', 'XGBoost, Optuna, SHAP, Platt calibration']],
+    metrics: [['Loan records', '12.2M'], ['Test ROC-AUC', '0.8933'], ['Test PR-AUC', '0.9532'], ['Decision threshold', '0.858'], ['Race FNR gap', '0.0125 → 0.0064']]
+  },
+  {
+    id: 'botchain', short: 'BotChain-AI', title: 'BotChain-AI', repo: 'https://github.com/search?q=user%3AMitul30M+BotChain&type=repositories',
+    tagline: 'A plain-English request becomes a validated n8n workflow, after a human says yes.',
+    intro: 'A chat interface built with Next.js, shadcn/ui and the Vercel AI SDK that turns an automation request into a validated, importable n8n workflow. It works from live n8n node documentation read over MCP instead of from memory.',
+    approach: 'The agent drafts the workflow JSON from the real node schemas, then validates it and repairs it up to three times. Sessions persist in SQLite and every run is traced in LangSmith.',
+    result: 'Nothing is saved until a person approves it.',
+    meta: [['Date', 'Jul 2026'], ['Field', 'Agentic AI'], ['Interface', 'Next.js chat UI · shadcn/ui · Vercel AI SDK'], ['Stack', 'LangGraph, MCP, Ollama, LangSmith, SQLite']],
+    metrics: [['Self-repair retries', '3'], ['Approval gates', '1'], ['Memory', 'SQLite'], ['Tracing', 'LangSmith'], ['Documentation source', 'Live, over MCP']]
+  },
+  {
+    id: 'art', short: 'Artwork Classifier', title: 'Real vs AI-Generated Artwork Classifier', repo: 'https://github.com/search?q=user%3AMitul30M+Artwork&type=repositories',
+    tagline: 'Two-phase fine-tuning on about 29.5K real and AI-generated artworks.',
+    intro: 'A binary image classifier built by fine-tuning EfficientNetB3 on 17,857 AI-generated and 11,686 human artworks.',
+    approach: 'Frozen feature extraction first, then the top 30 layers unfrozen. Balanced class weights, stratified 80/10/10 splits, label smoothing and cosine-decay fine-tuning kept training stable.',
+    result: 'The model reaches 96.85% test accuracy with 0.9938 AUC-ROC. Tuning the decision threshold with Youden\'s J lifted accuracy to 97.12%.',
+    meta: [['Date', 'Apr 2026'], ['Field', 'Deep learning'], ['Data', 'About 29.5K artworks'], ['Stack', 'EfficientNetB3, transfer learning, Youden\'s J']],
+    metrics: [['Images', 'About 29.5K'], ['Test accuracy', '96.85%'], ['AUC-ROC', '0.9938'], ['F1, AI-generated class', '0.9737'], ['Accuracy after threshold tuning', '97.12%']]
+  },
+  {
+    id: 'incident', short: 'Incident Response', title: 'Multi-Agent Incident Response', repo: 'https://github.com/search?q=user%3AMitul30M+Incident&type=repositories',
+    tagline: 'Four agents find the root cause before a person has to go looking.',
+    intro: 'Four LangGraph agents watch the logs of deployed Next.js apps. They monitor, diagnose, remediate and communicate.',
+    approach: 'Each agent owns one stage: monitor, diagnose, remediate and communicate. When a code change can fix the problem, the work happens on a separate branch.',
+    result: 'Code fixes are opened as pull requests for a developer to confirm. When a code change can\'t solve it, the system raises a GitHub Issue.',
+    meta: [['Date', 'Mar 2026'], ['Field', 'Agentic AI'], ['Agents', '4, orchestrated with LangGraph'], ['Output', 'Pull request or GitHub Issue']],
+    metrics: [['Specialised agents', '4'], ['Possible outcomes', '2'], ['Orchestration', 'LangGraph'], ['Target apps', 'Next.js']]
+  }
+];
+
+const homeCfg = [
+  { item: 'flex:0 1 36%; min-width:260px;', ar: '1 / 1.05' },
+  { item: 'flex:0 1 31%; min-width:260px; margin-top:56px;', ar: '4 / 3' },
+  { item: 'flex:0 1 30%; min-width:260px; margin-left:9%;', ar: '4 / 3' },
+  { item: 'flex:0 1 36%; min-width:260px;', ar: '3 / 4' }
+];
+const gArs = ['4 / 3', '1 / 1', '3 / 4', '4 / 4.6', '16 / 10'];
+
+const n = DATA.length;
+const idx = Math.max(0, DATA.findIndex((p) => p.id === view));
+
+const list = DATA.map((p, i) => {
+  const pal = PAL[i % PAL.length];
+  const g = gArs.map((ar, k) => cover(PAL[(i + k) % PAL.length], i * 10 + k + 2, frameCss(ar), p.id + '-g' + k));
+  const prev = DATA[(i + n - 1) % n];
+  const next = DATA[(i + 1) % n];
+  return {
+    id: p.id,
+    repo: p.repo,
+    n: String(i + 1),
+    title: p.title,
+    tagline: p.tagline,
+    intro: p.intro,
+    approach: p.approach,
+    result: p.result,
+    date: p.meta[0][1],
+    field: p.meta[1][1],
+    meta: p.meta.map((m) => ({ k: m[0], v: m[1] })),
+    metrics: p.metrics.map((m) => ({ k: m[0], v: m[1] })),
+    itemStyle: homeCfg[i].item,
+    cv: cover(pal, i * 10 + 1, frameCss(homeCfg[i].ar), p.id + '-home'),
+    th: cover(pal, i * 10 + 1, 'position:relative; overflow:hidden; isolation:isolate; border-radius:12px; width:100%; height:84px;', p.id + '-th'),
+    wide: cover(pal, i * 10 + 1, 'position:relative; overflow:hidden; isolation:isolate; border-radius:22px; width:100%; aspect-ratio:16 / 9; min-height:320px;', p.id + '-wide'),
+    sticky: 'calc(64px + ' + (i * 18) + 'px)',
+    hero: cover(pal, i * 10 + 9, 'position:absolute; inset:0;', p.id + '-hero'),
+    g1: g[0], g2: g[1], g3: g[2], g4: g[3], g5: g[4],
+    prevTitle: prev.short,
+    nextTitle: next.short,
+    goPrev: go(prev.id),
+    goNext: go(next.id),
+    open: go(p.id)
+  };
+});
+
+const eduList = [
+  { t: 'BSc Information Technology', sub: 'Universal MSG-SGKM College, Mumbai · CGPA 9.48', yr: '2022' },
+  { t: 'MSc Data Science', sub: 'NMIMS Mumbai · CGPA 8.95', yr: '2025' },
+  { t: 'Data Science, ML, DL and NLP Bootcamp', sub: 'Udemy certification', yr: 'Jan 2026' },
+  { t: 'AI Engineer Agentic Track', sub: 'Udemy · Agent and MCP course', yr: 'Jul 2026' }
+];
+
+const personalList = [
+  { t: 'Based in', sub: 'Mumbai · technically Dombivli' },
+  { t: 'Favourite food', sub: 'Pizza · especially deep-dish and pan' },
+  { t: 'Favourite beverage', sub: 'Frappuccino from Starbucks' },
+  { t: 'Football', sub: 'Borussia Dortmund · Heja BVB!!!' },
+  { t: 'F1', sub: 'Scuderia Ferrari · Charles Leclerc · Forza Charles, Forza Ferrari' },
+  { t: 'Favourite artist', sub: 'Drake' },
+  { t: 'Favourite albums', sub: 'Views · Take Care · Certified Lover Boy · Scorpion · Her Loss · Dark Lane Demo Tapes · Iceman · basically everything he makes' },
+  { t: 'NBA', sub: 'Boston Celtics' },
+  { t: 'Sign', sub: 'Aquarius' }
+];
+
+const stack = [
+  { k: 'Machine learning', v: 'Python · PyTorch · TensorFlow · Deep learning · XGBoost · EfficientNet · SHAP · Optuna' },
+  { k: 'LLMs and agents', v: 'LangChain · LangGraph · Agent SDKs · MCP · Ollama · LangSmith · Pinecone' },
+  { k: 'Full-stack', v: 'TypeScript · Next.js · React · Node.js · Express · REST · WebSockets · Socket.IO · Prisma · PostgreSQL · MongoDB · Redis' },
+  { k: 'Ship and operate', v: 'Docker · MLflow · BentoML · AWS · Git · GitHub · Vercel' },
+  { k: 'Design', v: 'UI/UX · Figma · Blender3D' },
+  { k: 'Business analytics', v: 'Data analysis for business problems · Proposing solutions · Power BI' },
+  { k: 'Exploring now', v: 'Advanced ML and deep learning · LLM applications and agents · Multi-agent orchestration · MLOps and DevOps · Production-ready AI' }
+];
+
+const wsChips = [['stagger', 'Staggered'], ['index', 'Index'], ['stack', 'Stacked']].map((x) => {
+  const on = ws === x[0];
+  return {
+    label: x[1],
+    pressed: on ? 'true' : 'false',
+    css: on ? 'background:var(--fg); color:var(--bg);' : 'background:transparent; color:var(--fg);',
+    pick: () => this.setState({ ws: x[0] })
+  };
+});
+
+return {
+  themeClass: dark ? 'th-dark' : 'th-light',
+  toggleTheme: () => this.setState({ dark: !dark }),
+  isHome: view === 'home',
+  isDetail: view !== 'home',
+  isStagger: ws === 'stagger',
+  isIndex: ws === 'index',
+  isStack: ws === 'stack',
+  wsChips,
+  clp: this._clpVM(),
+  goHome: go('home'),
+  projects: list,
+  cur: list[idx],
+  eduList,
+  personalList,
+  edu: { cv: cover(PAL[1], 77, frameCss('3 / 4'), 'edu') },
+  stack
+};
+}
+
+_clpWords() {
+  return ['Currently', 'somewhere', 'between', '“I', 'know', 'this”', 'and', '“let', 'me', 'experiment', 'with', 'it.”'];
+}
+
+_clpVM() {
+  const st = this.state || {};
+  const fall = !!st.fall;
+  const P = this._phys;
+  const words = this._clpWords().map((t, i) => {
+    let style = 'display:inline-block; margin-right:0.28em;';
+    if (fall && P && P.bodies[i]) {
+      const b = P.bodies[i];
+      style = 'position:absolute; left:0; top:0; width:' + b.w + 'px; height:' + b.h + 'px; text-align:center; white-space:nowrap; will-change:transform; transform:translate(' + (b.x - b.w / 2).toFixed(1) + 'px,' + (b.y - b.h / 2).toFixed(1) + 'px) rotate(' + b.a.toFixed(2) + 'deg);';
+    }
+    return { id: 'cw' + i, t, style };
+  });
+  let box = 'position:relative; margin:0; font-weight:400; font-size:clamp(30px,4.4vw,62px); line-height:1.06; letter-spacing:-0.01em; text-transform:uppercase; padding-right:max(0px, calc(100% - 14em));';
+  if (fall && P) box += ' height:' + P.H + 'px; border-bottom:1px solid var(--line);';
+  return {
+    words,
+    box,
+    label: fall ? 'Put it back' : 'Let it fall',
+    hint: fall ? 'Move your cursor through the pile' : 'Off the clock: F1, football, NBA, investing and markets, chess',
+    toggle: () => (fall ? this._reset() : this._start()),
+    wind: (e) => this._wind(e)
+  };
+}
+
+_start() {
+  const stage = document.getElementById('clp');
+  if (!stage) return;
+  const bodies = this._clpWords().map((t, i) => {
+    const el = document.getElementById('cw' + i);
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    return {
+      x: el.offsetLeft + w / 2, y: el.offsetTop + h / 2, w, h, m: Math.max(1, w * h / 1500),
+      vx: (Math.random() - 0.5) * 140, vy: 0, a: 0, av: (Math.random() - 0.5) * 60,
+      tilt: (Math.random() - 0.5) * 8, delay: Math.random() * 0.5 + i * 0.02, t: 0, on: false
+    };
+  });
+  const W = stage.clientWidth;
+  const H = Math.max(stage.offsetHeight + 260, 440);
+  this._phys = { W, H, bodies, still: 0 };
+  let reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (err) {}
+  if (reduce) {
+    for (let k = 0; k < 600; k++) this._step(1 / 60);
+    this.setState({ fall: true, tick: (this._tick = (this._tick || 0) + 1) });
+    return;
+  }
+  this.setState({ fall: true });
+  this._run();
+}
+
+_reset() {
+  if (this._raf) { cancelAnimationFrame(this._raf); this._raf = 0; }
+  this._phys = null;
+  this.setState({ fall: false });
+}
+
+componentWillUnmount() {
+  if (this._raf) cancelAnimationFrame(this._raf);
+}
+
+_wind(e) {
+  const P = this._phys;
+  if (!P || !(this.state && this.state.fall)) return;
+  const stage = document.getElementById('clp');
+  if (!stage) return;
+  const r = stage.getBoundingClientRect();
+  const cx = e.clientX - r.left;
+  const cy = e.clientY - r.top;
+  let hit = false;
+  for (const b of P.bodies) {
+    const dx = b.x - cx;
+    const dy = b.y - cy;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d < 120) {
+      const k = (1 - d / 120) * 70;
+      b.vx += dx / (d + 1) * k;
+      b.vy += dy / (d + 1) * k - 18;
+      b.av += (dx > 0 ? 1 : -1) * k * 0.15;
+      b.on = true;
+      hit = true;
+    }
+  }
+  if (hit) { P.still = 0; this._run(); }
+}
+
+_run() {
+  if (this._raf) return;
+  let last = performance.now();
+  const tick = (now) => {
+    const P = this._phys;
+    if (!P) { this._raf = 0; return; }
+    const dt = Math.min(0.033, (now - last) / 1000);
+    last = now;
+    this._step(dt / 2);
+    this._step(dt / 2);
+    this._tick = (this._tick || 0) + 1;
+    this.setState({ tick: this._tick });
+    if (P.still > 50) { this._raf = 0; return; }
+    this._raf = requestAnimationFrame(tick);
+  };
+  this._raf = requestAnimationFrame(tick);
+}
+
+// Rigid boxes: gravity, floor and wall bounce, mass-weighted collisions, friction, sleeping
+_step(dt) {
+  const P = this._phys;
+  if (!P) return;
+  const B = P.bodies;
+  const G = 2400;
+  const E = 0.3;
+  for (const b of B) {
+    if (!b.on) { b.t += dt; if (b.t >= b.delay) b.on = true; continue; }
+    b.vy += G * dt;
+    b.vx *= 0.9995;
+    b.x += b.vx * dt;
+    b.y += b.vy * dt;
+    b.a += b.av * dt;
+    b.av *= 0.99;
+  }
+  for (let it = 0; it < 4; it++) {
+    for (const b of B) {
+      if (!b.on) continue;
+      if (b.x - b.w / 2 < 0) { b.x = b.w / 2; b.vx = Math.abs(b.vx) * 0.4; }
+      if (b.x + b.w / 2 > P.W) { b.x = P.W - b.w / 2; b.vx = -Math.abs(b.vx) * 0.4; }
+      if (b.y + b.h / 2 > P.H) {
+        b.y = P.H - b.h / 2;
+        b.vy = b.vy > 60 ? -b.vy * E : 0;
+        b.vx *= 0.85;
+        b.av *= 0.6;
+      }
+    }
+    for (let i = 0; i < B.length; i++) {
+      for (let j = i + 1; j < B.length; j++) {
+        const p = B[i];
+        const q = B[j];
+        if (!p.on && !q.on) continue;
+        const dx = q.x - p.x;
+        const dy = q.y - p.y;
+        const ox = (p.w + q.w) / 2 - Math.abs(dx);
+        const oy = (p.h + q.h) / 2 - Math.abs(dy);
+        if (ox <= 0 || oy <= 0) continue;
+        const ip = p.on ? 1 / p.m : 0;
+        const iq = q.on ? 1 / q.m : 0;
+        const s = ip + iq;
+        if (s === 0) continue;
+        if (oy < ox) {
+          const sg = dy >= 0 ? 1 : -1;
+          p.y -= sg * oy * ip / s;
+          q.y += sg * oy * iq / s;
+          const rv = (q.vy - p.vy) * sg;
+          if (rv < 0) { const jn = -(1 + E) * rv / s; p.vy -= sg * jn * ip; q.vy += sg * jn * iq; }
+          const f = (q.vx - p.vx) * 0.15 / s;
+          p.vx += f * ip;
+          q.vx -= f * iq;
+        } else {
+          const sg = dx >= 0 ? 1 : -1;
+          p.x -= sg * ox * ip / s;
+          q.x += sg * ox * iq / s;
+          const rv = (q.vx - p.vx) * sg;
+          if (rv < 0) { const jn = -(1 + E) * rv / s; p.vx -= sg * jn * ip; q.vx += sg * jn * iq; }
+        }
+      }
+    }
+  }
+  let calm = true;
+  for (const b of B) {
+    if (!b.on) { calm = false; continue; }
+    const sp = Math.abs(b.vx) + Math.abs(b.vy);
+    if (sp < 70) {
+      b.vx *= 0.5;
+      b.vy *= 0.5;
+      b.av = 0;
+      b.a += (b.tilt - b.a) * 0.12;
+    } else {
+      calm = false;
+    }
+  }
+  P.still = calm ? P.still + 1 : 0;
+}
+}
+</script>
+</body>
+</html>
