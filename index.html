@@ -30,6 +30,7 @@ button{font-family:inherit}
 .ilist:hover .irow{opacity:.3}
 .ilist .irow:hover{opacity:1}
 .irow{transition:opacity .3s}
+.sball{position:absolute; left:0; top:0; display:flex; align-items:center; justify-content:center; box-sizing:border-box; width:calc(var(--d) * var(--sbscale, 1)); height:calc(var(--d) * var(--sbscale, 1)); padding:calc(var(--d) * var(--sbscale, 1) * .16); border:0; border-radius:50%; overflow:hidden; isolation:isolate; pointer-events:none; font-family:inherit; font-weight:500; font-size:clamp(8px, calc(var(--fs) * var(--sbscale, 1)), 16px); letter-spacing:.02em; line-height:1.14; text-align:center; text-transform:uppercase; will-change:transform}
 
 @keyframes loadup{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
 @keyframes rise{from{opacity:.1;transform:translateY(64px)}to{opacity:1;transform:none}}
@@ -127,9 +128,9 @@ button{font-family:inherit}
 </div>
 
 <!-- Style 1: staggered -->
-<sc-if value="{{isStagger}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{isStagger}}" hint-placeholder-val="{{ false }}">
 <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; row-gap:72px">
-<sc-for list="{{projects}}" as="p" hint-placeholder-count="4">
+<sc-for list="{{projects}}" as="p" hint-placeholder-count="6">
 <a href="#work" class="card rv" onClick="{{p.open}}" aria-label="{{p.title}}" style="display:block; {{p.itemStyle}}">
 <div style="{{p.cv.frame}}" onMouseMove="{{p.cv.move}}" onMouseLeave="{{p.cv.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{p.cv.mv}}"><div class="flow" style="{{p.cv.bg}}"></div></div></div><div class="grain" style="{{p.cv.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
 <div style="display:flex; align-items:baseline; gap:14px; padding-top:14px; font-size:11px; letter-spacing:.05em; text-transform:uppercase">
@@ -143,9 +144,9 @@ button{font-family:inherit}
 </sc-if>
 
 <!-- Style 2: index list -->
-<sc-if value="{{isIndex}}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{isIndex}}" hint-placeholder-val="{{ true }}">
 <div class="ilist" style="border-bottom:1px solid var(--line)">
-<sc-for list="{{projects}}" as="p" hint-placeholder-count="4">
+<sc-for list="{{projects}}" as="p" hint-placeholder-count="6">
 <a href="#work" class="card irow rv" onClick="{{p.open}}" aria-label="{{p.title}}" style="display:flex; align-items:center; gap:clamp(12px,3vw,40px); padding:clamp(18px,2.4vw,30px) 0; border-top:1px solid var(--line)">
 <span class="lbl" style="flex:0 0 24px">{{p.n}}</span>
 <span style="flex:1 1 auto; min-width:0; font-size:clamp(24px,4.4vw,64px); line-height:1.02; letter-spacing:-0.02em; text-transform:uppercase; text-wrap:balance">{{p.title}}</span>
@@ -162,11 +163,11 @@ button{font-family:inherit}
 <!-- Style 3: stacked cards -->
 <sc-if value="{{isStack}}" hint-placeholder-val="{{ false }}">
 <div style="max-width:1100px; margin:0 auto">
-<sc-for list="{{projects}}" as="p" hint-placeholder-count="4">
+<sc-for list="{{projects}}" as="p" hint-placeholder-count="6">
 <a href="#work" class="card" onClick="{{p.open}}" aria-label="{{p.title}}" style="display:block; position:sticky; top:{{p.sticky}}; margin-bottom:clamp(40px,10vh,120px)">
 <div style="{{p.wide.frame}}" onMouseMove="{{p.wide.move}}" onMouseLeave="{{p.wide.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{p.wide.mv}}"><div class="flow" style="{{p.wide.bg}}"></div></div></div><div class="grain" style="{{p.wide.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div>
 <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(14,0,12,0.75), rgba(14,0,12,0) 58%)"></div>
-<div style="position:absolute; left:clamp(18px,3vw,40px); right:clamp(18px,3vw,40px); top:clamp(16px,2.4vw,30px); display:flex; justify-content:space-between; color:#FFFFFF; font-size:11px; letter-spacing:.06em; text-transform:uppercase"><span>{{p.n}} / 4</span><span>{{p.field}} · {{p.date}}</span></div>
+<div style="position:absolute; left:clamp(18px,3vw,40px); right:clamp(18px,3vw,40px); top:clamp(16px,2.4vw,30px); display:flex; justify-content:space-between; color:#FFFFFF; font-size:11px; letter-spacing:.06em; text-transform:uppercase"><span>{{p.n}} / {{p.total}}</span><span>{{p.field}} · {{p.date}}</span></div>
 <div style="position:absolute; left:clamp(18px,3vw,40px); right:clamp(18px,3vw,40px); bottom:clamp(18px,3vw,40px); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:12px 24px; color:#FFFFFF">
 <span style="font-size:clamp(24px,3.8vw,52px); line-height:1.04; letter-spacing:-0.02em; text-transform:uppercase; max-width:14em">{{p.title}}</span>
 <span style="font-size:11px; letter-spacing:.06em; text-transform:uppercase; border:1px solid rgba(255,255,255,0.6); border-radius:999px; padding:8px 16px">View project →</span>
@@ -181,6 +182,42 @@ button{font-family:inherit}
 <section id="about" class="gut wrap" style="padding-top:clamp(96px,12vw,180px)">
 <h2 class="rv" style="margin:0; max-width:14em; font-weight:400; font-size:clamp(30px,4.4vw,62px); line-height:1.06; letter-spacing:-0.01em; text-transform:uppercase; text-wrap:balance">I build intelligent systems from the model to the deployed app.</h2>
 <p class="rv" style="margin:clamp(28px,3vw,44px) 0 0 0; max-width:34em; font-size:clamp(16px,1.5vw,21px); line-height:1.4; text-transform:uppercase">I learn by building. Deep learning models, LLM agents and the full-stack apps around them, with evaluation, human review and tracing built in. I also analyse data for business problems and propose solutions.</p>
+</section>
+
+<section class="gut wrap" style="padding-top:clamp(80px,10vw,160px)">
+<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px 24px; padding-bottom:clamp(24px,3vw,40px)">
+<p class="lbl" style="margin:0">Stack · View as</p>
+<div role="group" aria-label="Choose stack layout" style="display:inline-flex; flex-wrap:wrap; gap:4px; padding:4px; background:var(--chip); border:1px solid var(--line); border-radius:999px">
+<sc-for list="{{stChips}}" as="c" hint-placeholder-count="2">
+<button type="button" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}" style="min-height:40px; padding:0 18px; border:0; border-radius:999px; font-size:12px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; {{c.css}}">{{c.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<sc-if value="{{stList}}" hint-placeholder-val="{{ true }}">
+<div style="border-top:1px solid var(--line)">
+<sc-for list="{{stack}}" as="s" hint-placeholder-count="7">
+<div class="rv" style="display:flex; flex-wrap:wrap; gap:8px 32px; padding:20px 0; border-bottom:1px solid var(--line)">
+<div class="lbl" style="flex:0 0 200px; padding-top:3px">{{s.k}}</div>
+<div style="flex:1 1 320px; min-width:0; font-size:15px; line-height:1.55; text-transform:uppercase">{{s.v}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{stBalls}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; padding-bottom:18px">
+<span style="font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--mute)">Move the cursor through the balls, they move aside</span>
+</div>
+<div id="sbbox" style="--sbscale:{{sbScale}}; position:relative; box-sizing:border-box; min-height:clamp(420px,52vw,640px); border:1px solid var(--line); border-radius:18px; overflow:hidden">
+<sc-for list="{{sballs}}" as="b" hint-placeholder-count="24">
+<div id="{{b.id}}" class="sball" aria-hidden="true" style="--d:{{b.d}}px; --fs:{{b.fs}}px; color:{{b.ink}}; transform:{{b.tf}}; opacity:{{b.op}}">
+<div class="flow" aria-hidden="true" style="{{b.bg}}"></div>
+<span style="position:relative; z-index:1; pointer-events:none">{{b.t}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
 </section>
 
 <section class="gut wrap" style="padding-top:clamp(80px,10vw,160px); display:flex; flex-wrap:wrap; align-items:center; gap:56px 8%">
@@ -208,18 +245,6 @@ button{font-family:inherit}
 <div class="rv" style="display:flex; justify-content:space-between; align-items:flex-start; gap:24px">
 <div style="min-width:0; font-size:17px; line-height:1.25; text-transform:uppercase">{{e.t}}</div>
 <div style="flex:0 1 58%; font-size:15px; line-height:1.35; color:var(--mute); text-align:right; text-transform:uppercase">{{e.sub}}</div>
-</div>
-</sc-for>
-</div>
-</section>
-
-<section class="gut wrap" style="padding-top:clamp(80px,10vw,160px)">
-<p class="lbl" style="margin:0 0 20px 0">Stack</p>
-<div style="border-top:1px solid var(--line)">
-<sc-for list="{{stack}}" as="s" hint-placeholder-count="6">
-<div class="rv" style="display:flex; flex-wrap:wrap; gap:8px 32px; padding:20px 0; border-bottom:1px solid var(--line)">
-<div class="lbl" style="flex:0 0 200px; padding-top:3px">{{s.k}}</div>
-<div style="flex:1 1 320px; min-width:0; font-size:15px; line-height:1.55; text-transform:uppercase">{{s.v}}</div>
 </div>
 </sc-for>
 </div>
@@ -282,26 +307,14 @@ button{font-family:inherit}
 </section>
 
 <section class="gut wrap">
-<div style="width:min(100%,860px); margin:0 auto; display:flex; flex-direction:column; gap:clamp(56px,8vw,120px)">
+<div style="width:min(100%,760px); margin:0 auto; display:flex; flex-direction:column; gap:clamp(48px,7vw,84px)">
 
-<div class="pp" style="{{cur.g1.frame}}" onMouseMove="{{cur.g1.move}}" onMouseLeave="{{cur.g1.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g1.mv}}"><div class="flow" style="{{cur.g1.bg}}"></div></div></div><div class="grain" style="{{cur.g1.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
-
-<div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:48px 6%">
-<div style="flex:0 1 38%; min-width:220px; display:flex; flex-direction:column; gap:clamp(36px,5vw,64px)">
-<div class="pp" style="{{cur.g2.frame}}" onMouseMove="{{cur.g2.move}}" onMouseLeave="{{cur.g2.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g2.mv}}"><div class="flow" style="{{cur.g2.bg}}"></div></div></div><div class="grain" style="{{cur.g2.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
 <div class="rv">
 <p class="lbl" style="margin:0 0 12px 0">Approach</p>
 <p style="margin:0; font-size:15px; line-height:1.5; text-transform:uppercase">{{cur.approach}}</p>
 </div>
-</div>
-<div style="flex:0 1 46%; min-width:240px; padding-top:clamp(0px,5vw,72px)">
-<div class="pp" style="{{cur.g3.frame}}" onMouseMove="{{cur.g3.move}}" onMouseLeave="{{cur.g3.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g3.mv}}"><div class="flow" style="{{cur.g3.bg}}"></div></div></div><div class="grain" style="{{cur.g3.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
-</div>
-</div>
 
-<div class="pp" style="{{cur.g4.frame}}" onMouseMove="{{cur.g4.move}}" onMouseLeave="{{cur.g4.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g4.mv}}"><div class="flow" style="{{cur.g4.bg}}"></div></div></div><div class="grain" style="{{cur.g4.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
-
-<div class="rv" style="max-width:460px; margin-left:auto">
+<div class="rv">
 <p class="lbl" style="margin:0 0 12px 0">Outcome</p>
 <p style="margin:0; font-size:15px; line-height:1.5; text-transform:uppercase">{{cur.result}}</p>
 </div>
@@ -317,8 +330,6 @@ button{font-family:inherit}
 </sc-for>
 </div>
 </div>
-
-<div class="pp" style="{{cur.g5.frame}}" onMouseMove="{{cur.g5.move}}" onMouseLeave="{{cur.g5.leave}}"><div class="cv" style="position:absolute; inset:0; background:#000"><div class="par" style="position:absolute; left:0; right:0; top:-10%; bottom:-10%"><div style="{{cur.g5.mv}}"><div class="flow" style="{{cur.g5.bg}}"></div></div></div><div class="grain" style="{{cur.g5.grainBox}}"><svg aria-hidden="true" width="100%" height="100%" style="display:block"><filter id="nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(#nz)"></rect></svg></div></div></div>
 
 </div>
 </section>
@@ -350,12 +361,23 @@ button{font-family:inherit}
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":5200}}'>
+const SB_ITEMS = [
+  ['Python', 0], ['PyTorch', 0], ['TensorFlow', 0], ['Deep Learning', 0], ['XGBoost', 0], ['EfficientNet', 0], ['SHAP', 0], ['Optuna', 0],
+  ['LangChain', 1], ['LangGraph', 1], ['Agent SDKs', 1], ['Google ADK', 1], ['OpenAI Agents SDK', 1], ['Anthropic Agents SDK', 1], ['MCP', 1], ['Ollama', 1], ['LangSmith', 1], ['Pinecone', 1],
+  ['TypeScript', 2], ['Next.js', 2], ['React', 2], ['Node.js', 2], ['Express', 2], ['FastAPI', 2], ['REST', 2], ['WebSockets', 2], ['Socket.IO', 2], ['Prisma', 2], ['Drizzle', 2], ['PostgreSQL', 2], ['MongoDB', 2], ['Redis', 2],
+  ['Docker', 3], ['MLflow', 3], ['BentoML', 3], ['AWS', 3], ['Git', 3], ['GitHub', 3], ['Vercel', 3],
+  ['UI/UX', 4], ['Figma', 4], ['Blender3D', 4],
+  ['Data analysis', 5], ['Solutions', 5], ['Power BI', 5],
+  ['Advanced ML', 6], ['LLM applications', 6], ['Multi-agent', 6], ['MLOps', 6]
+];
+
 class Component extends DCLogic {
 renderVals() {
 const st = this.state || {};
 const view = st.view || 'home';
-const dark = !!st.dark;
-const ws = st.ws || 'stagger';
+const dark = st.dark !== false;
+const ws = st.ws || 'index';
+const sv = st.sv || 'list';
 
 const hex = (h) => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
 const rgba = (h, a) => { const c = hex(h); return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; };
@@ -405,16 +427,47 @@ const go = (id) => (e) => {
   if (e && e.preventDefault) e.preventDefault();
   this.setState({ view: id });
   try { window.scrollTo(0, 0); } catch (err) {}
+  if (id === 'home' && sv === 'balls') this._startBalls();
 };
 
 const PAL = [
   { base: '#FF5A4F', c: ['#9B4DE0', '#C04FD4', '#FF8A5C', '#FF4D4D', '#8E3FD6'] },
   { base: '#C9F26B', c: ['#4FD486', '#E9FF9E', '#2FBF71', '#F6FFD1', '#8FE06A'] },
   { base: '#FF9CCB', c: ['#E8409A', '#FFD9B8', '#FF6FB0', '#FFF1DC', '#C04FD4'] },
-  { base: '#F25A2A', c: ['#FFC83D', '#FF8A3D', '#B8321F', '#FFE9A8', '#FF4D4D'] }
+  { base: '#F25A2A', c: ['#FFC83D', '#FF8A3D', '#B8321F', '#FFE9A8', '#FF4D4D'] },
+  { base: '#63A4FF', c: ['#4FA8FF', '#7FE3D4', '#2F6BFF', '#D6FFF7', '#8FD4FF'] },
+  { base: '#B45CFF', c: ['#C9A0FF', '#FF6FB0', '#5B21B6', '#E9D6FF', '#9B4DE0'] }
+];
+
+const SB_CATS = [
+  { k: 'Machine learning', pal: PAL[1], ink: '#0B0B0C' },
+  { k: 'LLMs and agents', pal: PAL[5], ink: '#FFFFFF' },
+  { k: 'Full-stack', pal: PAL[4], ink: '#07121F' },
+  { k: 'Ship and operate', pal: PAL[3], ink: '#1B0C05' },
+  { k: 'Design', pal: PAL[2], ink: '#2A0A18' },
+  { k: 'Business analytics', pal: { base: '#7FE3D4', c: ['#D6FFF7', '#7FE3D4', '#1E9E8F', '#4FD4C4', '#B8FFEF'] }, ink: '#04211E' },
+  { k: 'Exploring now', pal: { base: '#C7C7CE', c: ['#EDEDF0', '#C7C7CE', '#8A8A93', '#DCDCE2', '#A8A8B0'] }, ink: '#141418' }
 ];
 
 const DATA = [
+  {
+    id: 'nimbus', short: 'Nimbus', title: 'Nimbus Agentic Support Triage', repo: 'https://github.com/Mitul30M/saas-ticketing-agentic-sm-backend',
+    tagline: 'The LLM proposes; deterministic code disposes.',
+    intro: 'An agentic support desk built with FastAPI, LangGraph and PostgreSQL. The agent reads a ticket, retrieves grounded knowledge, triages it and drafts a reply, then stops at a human approval gate before a refund or plan change can move. An operator dashboard traces every run, reviews drafts and approves executions, refunds and escalations.',
+    approach: 'The graph is policy, not model choice: intake, injection screen, triage, a deterministic plan, typed tools, hybrid retrieval, a grounding check, draft and proposal. Only a separate executor moves money or plan state, and database triggers refuse an approval without a recorded human decision.',
+    result: '43 of 43 evaluated tickets ran with no unapproved execution or send. Triage accuracy reached 0.951, tool-choice F1 0.971 and escalation recall 0.950.',
+    meta: [['Date', 'Nov 2026'], ['Field', 'Agentic AI'], ['Interface', 'Next.js console · traces · approvals · drafts'], ['Stack', 'FastAPI, LangGraph, PostgreSQL, pgvector, Groq']],
+    metrics: [['Tickets evaluated', '43 / 43'], ['Triage accuracy', '0.951'], ['Tool-choice F1', '0.971'], ['Escalation recall', '0.950'], ['Unapproved executions', '0'], ['Latency p50 / p95', '4.59 s / 6.35 s']]
+  },
+  {
+    id: 'quickdrop', short: 'QuickDrop', title: 'QuickDrop Rider Payout Dispute Desk', repo: 'https://github.com/Mitul30M/QuickDrop-Rider-Payment-HelpDesk-Agent',
+    tagline: 'Rider claims are hints, not payout authority.',
+    intro: 'A FastAPI payout-dispute service on Postgres. The model extracts intent, trip IDs, dates and language; deterministic code resolves identity, verifies source data, computes rupees and applies the seven-day window and the daily auto-pay cap. An ops dashboard traces runs, owns drafts, approvals and escalations, and reconciles the PaySwift sandbox.',
+    approach: 'Everything that touches money is code: identity, IST dates, rupee amounts, eligibility and the pay, approval or escalation decision. The LLM can read a message and draft a reply, never authorise a payout. Duplicate delivery stays idempotent and provider timeouts reconcile before retry.',
+    result: '30 of 30 evaluation cases passed, including 24 supplied fixtures and 6 evaluator-owned safety probes. Stub latency p95 held between 28.3 and 57.5 ms on clean Compose resets.',
+    meta: [['Date', 'Oct 2026'], ['Field', 'Applied AI'], ['Interface', 'Ops console · traces · drafts · escalations'], ['Stack', 'FastAPI, PostgreSQL, Docker, PaySwift sandbox']],
+    metrics: [['Eval cases passed', '30 / 30'], ['Safety probes', '6'], ['Stub latency p95', '28.3–57.5 ms'], ['Daily auto-pay cap', '₹200'], ['Duplicate delivery', 'Idempotent'], ['Money authority', 'Code, not model']]
+  },
   {
     id: 'hmda', short: 'Mortgage Predictor', title: 'Home Mortgage Approval Predictor', repo: 'https://github.com/search?q=user%3AMitul30M+Mortgage&type=repositories',
     tagline: 'The operating threshold is a fairness decision as much as a precision one.',
@@ -457,22 +510,22 @@ const homeCfg = [
   { item: 'flex:0 1 36%; min-width:260px;', ar: '1 / 1.05' },
   { item: 'flex:0 1 31%; min-width:260px; margin-top:56px;', ar: '4 / 3' },
   { item: 'flex:0 1 30%; min-width:260px; margin-left:9%;', ar: '4 / 3' },
-  { item: 'flex:0 1 36%; min-width:260px;', ar: '3 / 4' }
+  { item: 'flex:0 1 36%; min-width:260px;', ar: '3 / 4' },
+  { item: 'flex:0 1 31%; min-width:260px; margin-top:56px; margin-left:2%;', ar: '4 / 3' },
+  { item: 'flex:0 1 32%; min-width:260px; margin-top:24px;', ar: '1 / 1' }
 ];
-const gArs = ['4 / 3', '1 / 1', '3 / 4', '4 / 4.6', '16 / 10'];
-
 const n = DATA.length;
 const idx = Math.max(0, DATA.findIndex((p) => p.id === view));
 
 const list = DATA.map((p, i) => {
   const pal = PAL[i % PAL.length];
-  const g = gArs.map((ar, k) => cover(PAL[(i + k) % PAL.length], i * 10 + k + 2, frameCss(ar), p.id + '-g' + k));
   const prev = DATA[(i + n - 1) % n];
   const next = DATA[(i + 1) % n];
   return {
     id: p.id,
     repo: p.repo,
     n: String(i + 1),
+    total: String(n),
     title: p.title,
     tagline: p.tagline,
     intro: p.intro,
@@ -488,7 +541,6 @@ const list = DATA.map((p, i) => {
     wide: cover(pal, i * 10 + 1, 'position:relative; overflow:hidden; isolation:isolate; border-radius:22px; width:100%; aspect-ratio:16 / 9; min-height:320px;', p.id + '-wide'),
     sticky: 'calc(64px + ' + (i * 18) + 'px)',
     hero: cover(pal, i * 10 + 9, 'position:absolute; inset:0;', p.id + '-hero'),
-    g1: g[0], g2: g[1], g3: g[2], g4: g[3], g5: g[4],
     prevTitle: prev.short,
     nextTitle: next.short,
     goPrev: go(prev.id),
@@ -518,8 +570,8 @@ const personalList = [
 
 const stack = [
   { k: 'Machine learning', v: 'Python · PyTorch · TensorFlow · Deep learning · XGBoost · EfficientNet · SHAP · Optuna' },
-  { k: 'LLMs and agents', v: 'LangChain · LangGraph · Agent SDKs · MCP · Ollama · LangSmith · Pinecone' },
-  { k: 'Full-stack', v: 'TypeScript · Next.js · React · Node.js · Express · REST · WebSockets · Socket.IO · Prisma · PostgreSQL · MongoDB · Redis' },
+  { k: 'LLMs and agents', v: 'LangChain · LangGraph · Agent SDKs · Google ADK · OpenAI Agents SDK · Anthropic Agents SDK · MCP · Ollama · LangSmith · Pinecone' },
+  { k: 'Full-stack', v: 'TypeScript · Next.js · React · Node.js · Express · FastAPI · REST · WebSockets · Socket.IO · Prisma · Drizzle · PostgreSQL · MongoDB · Redis' },
   { k: 'Ship and operate', v: 'Docker · MLflow · BentoML · AWS · Git · GitHub · Vercel' },
   { k: 'Design', v: 'UI/UX · Figma · Blender3D' },
   { k: 'Business analytics', v: 'Data analysis for business problems · Proposing solutions · Power BI' },
@@ -536,6 +588,41 @@ const wsChips = [['stagger', 'Staggered'], ['index', 'Index'], ['stack', 'Stacke
   };
 });
 
+const stChips = [['list', 'List'], ['balls', 'Balls']].map((x) => {
+  const on = sv === x[0];
+  return {
+    label: x[1],
+    pressed: on ? 'true' : 'false',
+    css: on ? 'background:var(--fg); color:var(--bg);' : 'background:transparent; color:var(--fg);',
+    pick: () => {
+      this.setState({ sv: x[0] });
+      if (x[0] === 'balls') this._startBalls(); else this._stopBalls();
+    }
+  };
+});
+
+const bp = this._ballPhys;
+const sballs = SB_ITEMS.map((x, i) => {
+  const cat = SB_CATS[x[1]];
+  const t = x[0];
+  const id = 'sb' + i;
+  const len = t.length;
+  const d = len <= 4 ? 82 : len <= 7 ? 90 : len <= 11 ? 100 : len <= 15 ? 112 : 124;
+  const fs = len <= 11 ? 11 : 10;
+  const seed = 500 + i * 13;
+  const body = bp && bp.bodies ? bp.bodies[i] : null;
+  return {
+    id,
+    t,
+    d,
+    fs,
+    ink: cat.ink,
+    bg: 'position:absolute; inset:0; background:' + mesh(cat.pal, seed) + '; animation-delay:' + phase(seed) + ';',
+    op: body ? '1' : '0',
+    tf: body ? 'translate(' + (body.x - body.r).toFixed(1) + 'px,' + (body.y - body.r).toFixed(1) + 'px)' : 'translate(0px,0px)'
+  };
+});
+
 return {
   themeClass: dark ? 'th-dark' : 'th-light',
   toggleTheme: () => this.setState({ dark: !dark }),
@@ -545,6 +632,11 @@ return {
   isIndex: ws === 'index',
   isStack: ws === 'stack',
   wsChips,
+  stList: sv !== 'balls',
+  stBalls: sv === 'balls',
+  sbScale: bp && bp.scale ? bp.scale.toFixed(3) : 1,
+  stChips,
+  sballs,
   clp: this._clpVM(),
   goHome: go('home'),
   projects: list,
@@ -584,6 +676,275 @@ _clpVM() {
   };
 }
 
+_startBalls() {
+  const t = (this._ballBoot = (this._ballBoot || 0) + 1);
+  const boot = (n) => {
+    if (this._ballBoot !== t) return;
+    const box = document.getElementById('sbbox');
+    if (!box) {
+      if (n < 16) requestAnimationFrame(() => boot(n + 1));
+      return;
+    }
+    this._initBalls(box);
+  };
+  requestAnimationFrame(() => boot(0));
+}
+
+_rand(seed) {
+  let s = seed;
+  return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+}
+
+_initBalls(box) {
+  if (!box || !box.isConnected) return;
+  const W = box.clientWidth;
+  const H = box.clientHeight;
+  if (!W || !H) return;
+  box.style.setProperty('--sbscale', '1');
+  let area = 0;
+  for (let i = 0; i < SB_ITEMS.length; i++) {
+    const el = document.getElementById('sb' + i);
+    if (el) {
+      const r = el.offsetWidth / 2;
+      area += Math.PI * r * r;
+    }
+  }
+  const usable = Math.max(1, (W - 16) * (H - 16));
+  const scale = Math.max(0.45, Math.min(1, Math.sqrt((usable * 0.45) / Math.max(1, area))));
+  if (scale < 0.999) box.style.setProperty('--sbscale', scale.toFixed(3));
+  const rand = this._rand(1337);
+  const bodies = [];
+  for (let i = 0; i < SB_ITEMS.length; i++) {
+    const el = document.getElementById('sb' + i);
+    const r = el ? el.offsetWidth / 2 : 45;
+    const edge = 8;
+    let x = 0;
+    let y = 0;
+    let ok = false;
+    for (let k = 0; k < 900 && !ok; k++) {
+      x = edge + r + rand() * Math.max(1, W - 2 * r - edge * 2);
+      y = edge + r + rand() * Math.max(1, H - 2 * r - edge * 2);
+      ok = true;
+      for (const b of bodies) {
+        const dx = x - b.x;
+        const dy = y - b.y;
+        if (Math.sqrt(dx * dx + dy * dy) < r + b.r + 8) { ok = false; break; }
+      }
+    }
+    bodies.push({ x, y, r, vx: 0, vy: 0, awake: false });
+  }
+  for (let it = 0; it < 60; it++) {
+    let any = false;
+    for (let i = 0; i < bodies.length; i++) {
+      const a = bodies[i];
+      for (let j = i + 1; j < bodies.length; j++) {
+        const b = bodies[j];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const min = a.r + b.r + 4;
+        const d2 = dx * dx + dy * dy;
+        if (d2 >= min * min || d2 === 0) continue;
+        const d = Math.sqrt(d2);
+        const nx = dx / d;
+        const ny = dy / d;
+        const push = (min - d) / 2;
+        a.x -= nx * push;
+        a.y -= ny * push;
+        b.x += nx * push;
+        b.y += ny * push;
+        any = true;
+      }
+    }
+    for (const b of bodies) {
+      if (b.x - b.r < 6) b.x = 6 + b.r;
+      if (b.x + b.r > W - 6) b.x = W - 6 - b.r;
+      if (b.y - b.r < 6) b.y = 6 + b.r;
+      if (b.y + b.r > H - 6) b.y = H - 6 - b.r;
+    }
+    if (!any) break;
+  }
+  this._ballPhys = { W, H, bodies, hover: false, mx: -9999, my: -9999, scale };
+  box.style.setProperty('--sbscale', scale.toFixed(3));
+  this._ballBind(box);
+  this.setState({ bsInit: (this._bsInit = (this._bsInit || 0) + 1) });
+  this._ballPaint();
+  this._ballRun();
+}
+
+_ballBind(box) {
+  this._ballUnbind();
+  this._ballEl = box;
+  this._ballMove = (e) => {
+    const P = this._ballPhys;
+    if (!P) return;
+    const r = box.getBoundingClientRect();
+    P.mx = e.clientX - r.left;
+    P.my = e.clientY - r.top;
+    P.hover = true;
+    this._ballRun();
+  };
+  this._ballLeave = () => {
+    const P = this._ballPhys;
+    if (P) P.hover = false;
+  };
+  box.addEventListener('pointermove', this._ballMove);
+  box.addEventListener('pointerleave', this._ballLeave);
+  if (typeof ResizeObserver !== 'undefined') {
+    this._ballRo = new ResizeObserver(() => {
+      const P = this._ballPhys;
+      if (!P) return;
+      if (Math.abs(box.clientWidth - P.W) > 2 || Math.abs(box.clientHeight - P.H) > 2) this._initBalls(box);
+    });
+    this._ballRo.observe(box);
+  }
+}
+
+_ballUnbind() {
+  if (this._ballRo) { this._ballRo.disconnect(); this._ballRo = null; }
+  if (!this._ballEl) return;
+  if (this._ballMove) this._ballEl.removeEventListener('pointermove', this._ballMove);
+  if (this._ballLeave) this._ballEl.removeEventListener('pointerleave', this._ballLeave);
+  this._ballEl = null;
+  this._ballMove = null;
+  this._ballLeave = null;
+}
+
+_ballPaint() {
+  const P = this._ballPhys;
+  if (!P) return;
+  for (let i = 0; i < P.bodies.length; i++) {
+    const b = P.bodies[i];
+    const el = document.getElementById('sb' + i);
+    if (el) el.style.transform = 'translate(' + (b.x - b.r).toFixed(1) + 'px,' + (b.y - b.r).toFixed(1) + 'px)';
+  }
+}
+
+_ballRun() {
+  if (this._ballRaf) return;
+  let last = performance.now();
+  const tick = (now) => {
+    const P = this._ballPhys;
+    const box = document.getElementById('sbbox');
+    if (!P || !box) { this._ballRaf = 0; return; }
+    if (Math.abs(box.clientWidth - P.W) > 2 || Math.abs(box.clientHeight - P.H) > 2) {
+      this._ballRaf = 0;
+      this._initBalls(box);
+      return;
+    }
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    const a = this._ballStep(dt / 2);
+    const b = this._ballStep(dt / 2);
+    if (a || b) {
+      this._ballPaint();
+      this._ballRaf = requestAnimationFrame(tick);
+    } else {
+      this._ballRaf = 0;
+    }
+  };
+  this._ballRaf = requestAnimationFrame(tick);
+}
+
+_ballStep(dt) {
+  const P = this._ballPhys;
+  if (!P || !dt) return false;
+  const B = P.bodies;
+  const pad = 6;
+  let active = false;
+
+  if (P.hover) {
+    for (const b of B) {
+      const dx = b.x - P.mx;
+      const dy = b.y - P.my;
+      const d = Math.sqrt(dx * dx + dy * dy) || 0.001;
+      const R = 180 + b.r;
+      if (d < R) {
+        const f = 1 - d / R;
+        const k = 2000 * f * f * dt;
+        b.vx += dx / d * k;
+        b.vy += dy / d * k;
+        b.awake = true;
+      }
+    }
+  }
+
+  const drag = Math.pow(0.012, dt);
+  for (const b of B) {
+    if (!b.awake) continue;
+    active = true;
+    b.x += b.vx * dt;
+    b.y += b.vy * dt;
+    b.vx *= drag;
+    b.vy *= drag;
+    if (b.x - b.r < pad) { b.x = pad + b.r; b.vx = Math.abs(b.vx) * 0.6; }
+    if (b.x + b.r > P.W - pad) { b.x = P.W - pad - b.r; b.vx = -Math.abs(b.vx) * 0.6; }
+    if (b.y - b.r < pad) { b.y = pad + b.r; b.vy = Math.abs(b.vy) * 0.6; }
+    if (b.y + b.r > P.H - pad) { b.y = P.H - pad - b.r; b.vy = -Math.abs(b.vy) * 0.6; }
+    const sp2 = b.vx * b.vx + b.vy * b.vy;
+    if (sp2 > 300 * 300) {
+      const s = 300 / Math.sqrt(sp2);
+      b.vx *= s;
+      b.vy *= s;
+    } else if (sp2 < 36) {
+      b.vx = 0;
+      b.vy = 0;
+      b.awake = false;
+    }
+  }
+
+  for (let it = 0; it < 2; it++) {
+    for (let i = 0; i < B.length; i++) {
+      const a = B[i];
+      for (let j = i + 1; j < B.length; j++) {
+        const b = B[j];
+        if (!a.awake && !b.awake) continue;
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const min = a.r + b.r;
+        const d2 = dx * dx + dy * dy;
+        if (d2 >= min * min || d2 === 0) continue;
+        const d = Math.sqrt(d2);
+        const nx = dx / d;
+        const ny = dy / d;
+        const push = (min - d) / 2;
+        a.x -= nx * push;
+        a.y -= ny * push;
+        b.x += nx * push;
+        b.y += ny * push;
+        const rvx = b.vx - a.vx;
+        const rvy = b.vy - a.vy;
+        const vn = rvx * nx + rvy * ny;
+        if (vn < 0) {
+          const imp = vn * 0.65;
+          a.vx += imp * nx;
+          a.vy += imp * ny;
+          b.vx -= imp * nx;
+          b.vy -= imp * ny;
+        }
+        a.awake = true;
+        b.awake = true;
+        active = true;
+      }
+    }
+  }
+
+  for (const b of B) {
+    if (b.x - b.r < pad) b.x = pad + b.r;
+    if (b.x + b.r > P.W - pad) b.x = P.W - pad - b.r;
+    if (b.y - b.r < pad) b.y = pad + b.r;
+    if (b.y + b.r > P.H - pad) b.y = P.H - pad - b.r;
+  }
+
+  return active;
+}
+
+_stopBalls() {
+  this._ballBoot = (this._ballBoot || 0) + 1;
+  if (this._ballRaf) { cancelAnimationFrame(this._ballRaf); this._ballRaf = 0; }
+  this._ballUnbind();
+  this._ballPhys = null;
+}
+
 _start() {
   const stage = document.getElementById('clp');
   if (!stage) return;
@@ -619,6 +980,7 @@ _reset() {
 
 componentWillUnmount() {
   if (this._raf) cancelAnimationFrame(this._raf);
+  if (this._ballRaf) cancelAnimationFrame(this._ballRaf);
 }
 
 _wind(e) {
