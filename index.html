@@ -30,6 +30,7 @@ button{font-family:inherit}
 .ilist:hover .irow{opacity:.3}
 .ilist .irow:hover{opacity:1}
 .irow{transition:opacity .3s}
+.sbgone .sball{visibility:hidden!important}
 .sball{position:absolute; left:0; top:0; display:flex; align-items:center; justify-content:center; box-sizing:border-box; width:calc(var(--d) * var(--sbscale, 1)); height:calc(var(--d) * var(--sbscale, 1)); padding:calc(var(--d) * var(--sbscale, 1) * .16); border:0; border-radius:50%; overflow:hidden; isolation:isolate; pointer-events:none; font-family:inherit; font-weight:500; font-size:clamp(8px, calc(var(--fs) * var(--sbscale, 1)), 16px); letter-spacing:.02em; line-height:1.14; text-align:center; text-transform:uppercase; will-change:transform}
 
 @keyframes loadup{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
@@ -695,7 +696,7 @@ _rand(seed) {
   return () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
 }
 
-_initBalls(box) {
+_initBalls(box, noFall) {
   if (!box || !box.isConnected) return;
   const W = box.clientWidth;
   const H = box.clientHeight;
@@ -768,7 +769,8 @@ _initBalls(box) {
   this._ballBind(box);
   this.setState({ bsInit: (this._bsInit = (this._bsInit || 0) + 1) });
   this._ballPaint();
-  this._ballRun();
+  if (!noFall && this.state && this.state.fall) this._ballsFall();
+  else this._ballRun();
 }
 
 _ballBind(box) {
@@ -776,7 +778,7 @@ _ballBind(box) {
   this._ballEl = box;
   this._ballMove = (e) => {
     const P = this._ballPhys;
-    if (!P) return;
+    if (!P || P.fall) return;
     const r = box.getBoundingClientRect();
     P.mx = e.clientX - r.left;
     P.my = e.clientY - r.top;
@@ -792,7 +794,7 @@ _ballBind(box) {
   if (typeof ResizeObserver !== 'undefined') {
     this._ballRo = new ResizeObserver(() => {
       const P = this._ballPhys;
-      if (!P) return;
+      if (!P || P.fall) return;
       if (Math.abs(box.clientWidth - P.W) > 2 || Math.abs(box.clientHeight - P.H) > 2) this._initBalls(box);
     });
     this._ballRo.observe(box);
@@ -812,10 +814,14 @@ _ballUnbind() {
 _ballPaint() {
   const P = this._ballPhys;
   if (!P) return;
+  const fall = !!P.fall;
+  const sx = fall ? (window.pageXOffset || 0) : 0;
+  const sy = fall ? (window.pageYOffset || 0) : 0;
+  const pre = fall ? 'fb' : 'sb';
   for (let i = 0; i < P.bodies.length; i++) {
     const b = P.bodies[i];
-    const el = document.getElementById('sb' + i);
-    if (el) el.style.transform = 'translate(' + (b.x - b.r).toFixed(1) + 'px,' + (b.y - b.r).toFixed(1) + 'px)';
+    const el = document.getElementById(pre + i);
+    if (el) el.style.transform = 'translate(' + (b.x - b.r - sx).toFixed(1) + 'px,' + (b.y - b.r - sy).toFixed(1) + 'px)';
   }
 }
 
@@ -826,7 +832,12 @@ _ballRun() {
     const P = this._ballPhys;
     const box = document.getElementById('sbbox');
     if (!P || !box) { this._ballRaf = 0; return; }
-    if (Math.abs(box.clientWidth - P.W) > 2 || Math.abs(box.clientHeight - P.H) > 2) {
+    if (P.fall) {
+      const de = document.documentElement;
+      const nh = Math.max(de.scrollHeight, document.body ? document.body.scrollHeight : 0);
+      const nw = de.clientWidth;
+      if (nh !== P.H || nw !== P.W) { P.H = nh; P.W = nw; P.calm = 0; }
+    } else if (Math.abs(box.clientWidth - P.W) > 2 || Math.abs(box.clientHeight - P.H) > 2) {
       this._ballRaf = 0;
       this._initBalls(box);
       return;
@@ -848,6 +859,7 @@ _ballRun() {
 _ballStep(dt) {
   const P = this._ballPhys;
   if (!P || !dt) return false;
+  if (P.fall) return this._ballFallStep(dt);
   const B = P.bodies;
   const pad = 6;
   let active = false;
@@ -938,9 +950,213 @@ _ballStep(dt) {
   return active;
 }
 
+// "Let it fall": the balls leave their box, drop down the whole page with gravity and pile up at the page bottom; the cursor still pushes them around
+_ballsFall() {
+  const P = this._ballPhys;
+  const box = document.getElementById('sbbox');
+  if (!P || !box || P.fall) return;
+  const de = document.documentElement;
+  const sx = window.pageXOffset || 0;
+  const sy = window.pageYOffset || 0;
+  const rect = box.getBoundingClientRect();
+  const ox = rect.left + sx + box.clientLeft;
+  const oy = rect.top + sy + box.clientTop;
+  const bh = P.H || 1;
+  for (const b of P.bodies) {
+    b.delay = (1 - b.y / bh) * 0.45 + Math.random() * 0.15;
+    b.x += ox;
+    b.y += oy;
+    b.on = false;
+    b.t = 0;
+    b.vx = (Math.random() - 0.5) * 120;
+    b.vy = 0;
+    b.m = Math.max(1, b.r * b.r / 400);
+  }
+  P.W = de.clientWidth;
+  P.H = Math.max(de.scrollHeight, document.body ? document.body.scrollHeight : 0);
+  P.fall = true;
+  P.calm = 0;
+  P.hover = false;
+  const old = document.getElementById('sbfall');
+  if (old) old.remove();
+  const ov = document.createElement('div');
+  ov.id = 'sbfall';
+  ov.setAttribute('aria-hidden', 'true');
+  ov.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:90;';
+  try { ov.style.fontFamily = getComputedStyle(box).fontFamily; } catch (err) {}
+  ov.style.setProperty('--sbscale', box.style.getPropertyValue('--sbscale') || '1');
+  for (let i = 0; i < P.bodies.length; i++) {
+    const el = document.getElementById('sb' + i);
+    if (!el) continue;
+    const c = el.cloneNode(true);
+    c.id = 'fb' + i;
+    c.style.opacity = '1';
+    ov.appendChild(c);
+  }
+  document.body.appendChild(ov);
+  box.classList.add('sbgone');
+  this._fbMove = (e) => {
+    const Q = this._ballPhys;
+    if (!Q || !Q.fall) return;
+    Q.cx = e.clientX;
+    Q.cy = e.clientY;
+    Q.mx = Q.cx + (window.pageXOffset || 0);
+    Q.my = Q.cy + (window.pageYOffset || 0);
+    Q.hover = true;
+    this._ballRun();
+  };
+  this._fbLeave = () => { const Q = this._ballPhys; if (Q) Q.hover = false; };
+  this._fbScroll = () => {
+    const Q = this._ballPhys;
+    if (!Q || !Q.fall) return;
+    if (Q.hover && Q.cx !== undefined) {
+      Q.mx = Q.cx + (window.pageXOffset || 0);
+      Q.my = Q.cy + (window.pageYOffset || 0);
+    }
+    this._ballPaint();
+    if (Q.hover) this._ballRun();
+  };
+  this._fbResize = () => { const Q = this._ballPhys; if (Q && Q.fall) { Q.calm = 0; this._ballRun(); } };
+  window.addEventListener('pointermove', this._fbMove);
+  document.documentElement.addEventListener('pointerleave', this._fbLeave);
+  window.addEventListener('scroll', this._fbScroll, { passive: true });
+  window.addEventListener('resize', this._fbResize);
+  let reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (err) {}
+  if (reduce) {
+    for (let k = 0; k < 1800; k++) this._ballFallStep(1 / 120);
+    this._ballPaint();
+    return;
+  }
+  this._ballPaint();
+  this._ballRun();
+}
+
+_ballFallOff() {
+  if (this._fbMove) window.removeEventListener('pointermove', this._fbMove);
+  if (this._fbScroll) window.removeEventListener('scroll', this._fbScroll);
+  if (this._fbResize) window.removeEventListener('resize', this._fbResize);
+  if (this._fbLeave) document.documentElement.removeEventListener('pointerleave', this._fbLeave);
+  this._fbMove = this._fbScroll = this._fbResize = this._fbLeave = null;
+  const ov = document.getElementById('sbfall');
+  if (ov) ov.remove();
+  const box = document.getElementById('sbbox');
+  if (box) box.classList.remove('sbgone');
+}
+
+// "Put it back": rebuild the original floating layout
+_ballsRestore() {
+  if (!this._ballPhys) return;
+  if (this._ballRaf) { cancelAnimationFrame(this._ballRaf); this._ballRaf = 0; }
+  this._ballFallOff();
+  const box = document.getElementById('sbbox');
+  if (box) this._initBalls(box, true);
+}
+
+_ballFallStep(dt) {
+  const P = this._ballPhys;
+  const B = P.bodies;
+  const pad = 6;
+  const G = 2200;
+  let moved = false;
+  if (P.hover) {
+    for (const b of B) {
+      if (!b.on) continue;
+      const dx = b.x - P.mx;
+      const dy = b.y - P.my;
+      const d = Math.sqrt(dx * dx + dy * dy) || 0.001;
+      const R = 180 + b.r;
+      if (d < R) {
+        const f = 1 - d / R;
+        const k = 11000 * f * f * dt;
+        b.vx += dx / d * k;
+        b.vy += dy / d * k;
+        b.push = true;
+        moved = true;
+      }
+    }
+  }
+  for (const b of B) {
+    if (!b.on) { b.t += dt; if (b.t >= b.delay) b.on = true; continue; }
+    b.vy += G * dt;
+    if (b.vy > 2600) b.vy = 2600;
+    b.x += b.vx * dt;
+    b.y += b.vy * dt;
+  }
+  for (const b of B) b.c = false;
+  for (let it = 0; it < 6; it++) {
+    for (const b of B) {
+      if (!b.on) continue;
+      if (b.x - b.r < pad) { b.x = pad + b.r; b.vx = b.vx < -120 ? -b.vx * 0.4 : 0; }
+      if (b.x + b.r > P.W - pad) { b.x = P.W - pad - b.r; b.vx = b.vx > 120 ? -b.vx * 0.4 : 0; }
+      if (b.y - b.r < pad) { b.y = pad + b.r; b.vy = Math.abs(b.vy) * 0.3; }
+      if (b.y + b.r > P.H - pad) {
+        b.y = P.H - pad - b.r;
+        b.c = true;
+        b.vy = b.vy > 90 ? -b.vy * 0.35 : 0;
+        b.vx *= 0.985;
+      }
+    }
+    for (let i = 0; i < B.length; i++) {
+      const a = B[i];
+      for (let j = i + 1; j < B.length; j++) {
+        const c = B[j];
+        if (!a.on && !c.on) continue;
+        const dx = c.x - a.x;
+        const dy = c.y - a.y;
+        const min = a.r + c.r;
+        const d2 = dx * dx + dy * dy;
+        if (d2 >= min * min || d2 === 0) continue;
+        const d = Math.sqrt(d2);
+        const nx = dx / d;
+        const ny = dy / d;
+        a.c = true;
+        c.c = true;
+        const ia = a.on ? 1 / a.m : 0;
+        const ic = c.on ? 1 / c.m : 0;
+        const s = ia + ic;
+        if (s === 0) continue;
+        const overlap = min - d;
+        a.x -= nx * overlap * ia / s;
+        a.y -= ny * overlap * ia / s;
+        c.x += nx * overlap * ic / s;
+        c.y += ny * overlap * ic / s;
+        const rvx = c.vx - a.vx;
+        const rvy = c.vy - a.vy;
+        const vn = rvx * nx + rvy * ny;
+        if (vn < 0) {
+          const e = vn < -120 ? 0.35 : 0;
+          const jn = -(1 + e) * vn / s;
+          a.vx -= jn * ia * nx;
+          a.vy -= jn * ia * ny;
+          c.vx += jn * ic * nx;
+          c.vy += jn * ic * ny;
+          const tx = -ny;
+          const ty = nx;
+          const f = (rvx * tx + rvy * ty) * 0.08 / s;
+          a.vx += f * ia * tx;
+          a.vy += f * ia * ty;
+          c.vx -= f * ic * tx;
+          c.vy -= f * ic * ty;
+        }
+      }
+    }
+  }
+  let calm = true;
+  for (const b of B) {
+    if (!b.on) { calm = false; continue; }
+    const sp = Math.abs(b.vx) + Math.abs(b.vy);
+    if (b.push) { calm = false; b.push = false; } else if (b.c && sp < 70) { b.vx *= 0.5; b.vy *= 0.5; } else calm = false;
+  }
+  if (moved) calm = false;
+  P.calm = calm ? (P.calm || 0) + 1 : 0;
+  return P.calm < 80;
+}
+
 _stopBalls() {
   this._ballBoot = (this._ballBoot || 0) + 1;
   if (this._ballRaf) { cancelAnimationFrame(this._ballRaf); this._ballRaf = 0; }
+  this._ballFallOff();
   this._ballUnbind();
   this._ballPhys = null;
 }
@@ -966,21 +1182,25 @@ _start() {
   if (reduce) {
     for (let k = 0; k < 600; k++) this._step(1 / 60);
     this.setState({ fall: true, tick: (this._tick = (this._tick || 0) + 1) });
+    if (this._ballPhys) this._ballsFall();
     return;
   }
   this.setState({ fall: true });
   this._run();
+  if (this._ballPhys) this._ballsFall();
 }
 
 _reset() {
   if (this._raf) { cancelAnimationFrame(this._raf); this._raf = 0; }
   this._phys = null;
   this.setState({ fall: false });
+  this._ballsRestore();
 }
 
 componentWillUnmount() {
   if (this._raf) cancelAnimationFrame(this._raf);
   if (this._ballRaf) cancelAnimationFrame(this._ballRaf);
+  this._ballFallOff();
 }
 
 _wind(e) {
